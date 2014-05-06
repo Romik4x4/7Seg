@@ -72,9 +72,6 @@ void setup() {
 
   pinMode(DP,OUTPUT);  // DP
 
-  // pinMode(COOLER,OUTPUT);  // DC/DC 5v12
-  // pinMode(COOLER,LOW);
-
   digitalWrite(LED,HIGH);
 
 }
