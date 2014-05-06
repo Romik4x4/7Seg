@@ -8,8 +8,10 @@ OneWire oneWire(ONE_WIRE_BUS);
 
 // DallasTemperature sensors(&oneWire);
 // DeviceAddress insideThermometer = { 0x28, 0x0C, 0x49, 0x7F, 0x05, 0x00, 0x00, 0x7E };
- 
-#define LED 6 // Test LED
+
+// const int LED = 6; // Test LED
+
+#define LED 6
 
 #define A A4
 #define B A2
@@ -25,38 +27,41 @@ OneWire oneWire(ONE_WIRE_BUS);
 
 #define DP 9      // Точка
 
-#define COOLER 5  // Вентилятор не работает
+#define COOLER 5  // Вентилятор 
 
-const int segs[7] = { A, B, C, D, E, F, G };
+const int segs[7] = { 
+  A, B, C, D, E, F, G };
 
-const byte numbers[10] = {  0b1000000, 
-                            0b1111001, 
-                            0b0100100, 
-                            0b0110000, 
-                            0b0011001, 
-                            0b0010010,
-                            0b0000010, 
-                            0b1111000, 
-                            0b0000000, 
-                            0b0010000 };
+const byte numbers[10] = {  
+  0b1000000, 
+  0b1111001, 
+  0b0100100, 
+  0b0110000, 
+  0b0011001, 
+  0b0010010,
+  0b0000010, 
+  0b1111000, 
+  0b0000000, 
+  0b0010000 };
 
 long previousMillis = 0; 
 long interval = 1000;
 unsigned long currentMillis;
 
+
 int temp;
 
 void setup() {    
 
-//  sensors.begin();
-//  sensors.setResolution(insideThermometer, 9);
-   
+  //  sensors.begin();
+  //  sensors.setResolution(insideThermometer, 9);
+
   pinMode(LED, OUTPUT);  
 
   pinMode(13,OUTPUT);  // Digital 1
   pinMode(A0,OUTPUT);  // Digital 2  
   pinMode(A1,OUTPUT);  // Digital 3
-    
+
   pinMode(A4,OUTPUT); // SEG A
   pinMode(A2,OUTPUT); // SEG B
   pinMode(10,OUTPUT); // SEG C
@@ -64,33 +69,42 @@ void setup() {
   pinMode(7,OUTPUT);  // SEG E
   pinMode(A3,OUTPUT); // SEG F
   pinMode(11,OUTPUT); // SEG G
-  
+
   pinMode(DP,OUTPUT);  // DP
-    
-  digitalWrite(LED,HIGH); // LED
-  
+
+  // pinMode(COOLER,OUTPUT);  // DC/DC 5v12
+  // pinMode(COOLER,LOW);
+
+  digitalWrite(LED,HIGH);
+
 }
 
 
 void loop() {
-  
+
+  currentMillis = millis();
+
   // sensors.requestTemperatures();
- 
+
   lightDigit1(numbers[1]); // temp%10]);
   delay(5);
   lightDigit2(numbers[2]); // int(temp/10)]);
   delay(5);
   lightDigit3(numbers[9]); // int(8)]);
   delay(5);
-  
-   // temp = sensors.getTempC(insideThermometer);
-  
-//  currentMillis = millis();
-//  
-// if(currentMillis - previousMillis > interval) {
-//   previousMillis = currentMillis;
-//   if (digitalRead(LED) == 1) { digitalWrite(LED,LOW); } else { digitalWrite(LED,HIGH); }
-//  }
+
+  // temp = sensors.getTempC(insideThermometer);
+
+  if(currentMillis - previousMillis > interval) {
+    previousMillis = currentMillis;
+    if (digitalRead(LED) == 1) { 
+      digitalWrite(LED,LOW); 
+    } 
+    else { 
+      digitalWrite(LED,HIGH); 
+    }
+  }
+}
 
 void lightDigit1(byte number) {
   digitalWrite(CA1,HIGH);
@@ -122,4 +136,5 @@ void lightSegments(byte number) {
     digitalWrite(segs[i], bit);
   }
 }
+
 
