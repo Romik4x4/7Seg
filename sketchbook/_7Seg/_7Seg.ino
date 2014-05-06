@@ -54,11 +54,15 @@ long interval = 1000;
 unsigned long currentMillis;
 boolean run = false;
 
-float temp;
-int t1,t2,t3;
+     int thousands = 0;
+     int hundreds = 0;
+     int tens = 0;
+     int ones = 0;
 
 void setup() {    
 
+  Serial.begin(9600);
+  
   //  sensors.begin();
   //  sensors.setResolution(insideThermometer, 9);
 
@@ -91,11 +95,11 @@ void loop() {
 
   // sensors.requestTemperatures();
 
-  lightDigit1(numbers[1]); // temp%10]);
+  lightDigit1(numbers[thousands]); // temp%10]);
   delay(5);
-  lightDigit2(numbers[2]); // int(temp/10)]);
+  lightDigit2(numbers[hundreds]); // int(temp/10)]);
   delay(5);
-  lightDigit3(numbers[9]); // int(8)]);
+  lightDigit3(numbers[tens]); // int(8)]);
   delay(5);
 
   // temp = sensors.getTempC(insideThermometer);
@@ -109,33 +113,20 @@ void loop() {
      ds.write(0xBE);  
      for ( i = 0; i < 9; i++) data[i] = ds.read();
      run = false;
-     int HighByte, LowByte, TReading, Tc_100;
-     LowByte = data[0];
-     HighByte = data[1];
-     TReading = (HighByte << 8) + LowByte; 
-     Tc_100 = TReading/2;  
      
-     byte MSB = data[1];
-     byte LSB = data[0];
+     int16_t raw = (data[1] << 8) | data[0];
+     int celsius = ((float)raw / 16.0)*100;
 
-     float tempRead = ((MSB << 8) | LSB); //using two's compliment
-     float TemperatureSum = tempRead / 16;
- 
- /*
- 
- thousands=value/1000;
- hundreds=(value%1000)/100;
- tens=(value%100)/10;
- ones=value%10;
+     thousands = celsius/1000;
+     hundreds = (celsius%1000)/100;
+     tens = (celsius%100)/10;
+     ones = celsius%10;
 
- digdisp(thousands,0);
- digdisp(hundreds,1);
- digdisp(tens,2);
- digdisp(ones,3);
- cleardisplay();
-
- */
- 
+     // Serial.println(celsius);
+     // Serial.println(ones);
+     // Serial.println(tens);
+     // Serial.println(hundreds);
+     // Serial.println(thousands);
  
    }    
    
