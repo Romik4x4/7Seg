@@ -25,7 +25,7 @@ const int LED = 6; // Test LED
 
 #define DP 9      // Точка
 
-#define COOLER 5  // Вентилятор 
+#define COOLER 5  // Вентилятор не работает
 
 const int segs[7] = { A, B, C, D, E, F, G };
 
@@ -91,9 +91,9 @@ void loop() {
   
   currentMillis = millis();
   
-  if(currentMillis - previousMillis > interval) {
+ if(currentMillis - previousMillis > interval) {
    previousMillis = currentMillis;
-   if (digitalRead(LED) == 1) digitalWrite(LED,LOW); else digitalWrite(LED,HIGH);   
+   if (digitalRead(LED) == 1) { digitalWrite(LED,LOW); } else { digitalWrite(LED,HIGH); }
   }
 
 void lightDigit1(byte number) {
