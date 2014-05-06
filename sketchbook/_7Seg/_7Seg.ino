@@ -4,12 +4,18 @@
 
 #define ONE_WIRE_BUS 2
 
-OneWire oneWire(ONE_WIRE_BUS);
+// OneWire oneWire(ONE_WIRE_BUS);
+
+OneWire ds(ONE_WIRE_BUS);
+
 
 // DallasTemperature sensors(&oneWire);
 // DeviceAddress insideThermometer = { 0x28, 0x0C, 0x49, 0x7F, 0x05, 0x00, 0x00, 0x7E };
 
 // const int LED = 6; // Test LED
+
+byte addr[8] = { 0x28, 0x0C, 0x49, 0x7F, 0x05, 0x00, 0x00, 0x7E };
+byte data[12];
 
 #define LED 6
 
@@ -27,10 +33,9 @@ OneWire oneWire(ONE_WIRE_BUS);
 
 #define DP 9      // Точка
 
-#define COOLER 5  // Вентилятор 
+#define COOLER 5  // Вентилятор Не работает
 
-const int segs[7] = { 
-  A, B, C, D, E, F, G };
+const int segs[7] = { A, B, C, D, E, F, G };
 
 const byte numbers[10] = {  
   0b1000000, 
@@ -47,9 +52,10 @@ const byte numbers[10] = {
 long previousMillis = 0; 
 long interval = 1000;
 unsigned long currentMillis;
+boolean run = false;
 
-
-int temp;
+float temp;
+int t1,t2,t3;
 
 void setup() {    
 
@@ -79,6 +85,8 @@ void setup() {
 
 void loop() {
 
+  byte i;
+  
   currentMillis = millis();
 
   // sensors.requestTemperatures();
@@ -94,6 +102,50 @@ void loop() {
 
   if(currentMillis - previousMillis > interval) {
     previousMillis = currentMillis;
+
+    if (run) {
+     ds.reset();
+     ds.select(addr);    
+     ds.write(0xBE);  
+     for ( i = 0; i < 9; i++) data[i] = ds.read();
+     run = false;
+     int HighByte, LowByte, TReading, Tc_100;
+     LowByte = data[0];
+     HighByte = data[1];
+     TReading = (HighByte << 8) + LowByte; 
+     Tc_100 = TReading/2;  
+     
+     byte MSB = data[1];
+     byte LSB = data[0];
+
+     float tempRead = ((MSB << 8) | LSB); //using two's compliment
+     float TemperatureSum = tempRead / 16;
+ 
+ /*
+ 
+ thousands=value/1000;
+ hundreds=(value%1000)/100;
+ tens=(value%100)/10;
+ ones=value%10;
+
+ digdisp(thousands,0);
+ digdisp(hundreds,1);
+ digdisp(tens,2);
+ digdisp(ones,3);
+ cleardisplay();
+
+ */
+ 
+ 
+   }    
+   
+    if (!run) {
+     ds.reset();
+     ds.select(addr);
+     ds.write(0x44,1);
+     run = true;
+    }    
+    
     if (digitalRead(LED) == 1) { 
       digitalWrite(LED,LOW); 
     } 
