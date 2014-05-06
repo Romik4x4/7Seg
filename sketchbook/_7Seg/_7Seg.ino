@@ -9,7 +9,7 @@ OneWire oneWire(ONE_WIRE_BUS);
 // DallasTemperature sensors(&oneWire);
 // DeviceAddress insideThermometer = { 0x28, 0x0C, 0x49, 0x7F, 0x05, 0x00, 0x00, 0x7E };
  
-const int LED = 6; // Test LED
+#define LED 6 // Test LED
 
 #define A A4
 #define B A2
@@ -66,9 +66,6 @@ void setup() {
   pinMode(11,OUTPUT); // SEG G
   
   pinMode(DP,OUTPUT);  // DP
-  
-   // pinMode(COOLER,OUTPUT);  // DC/DC 5v12
-   // pinMode(COOLER,LOW);
     
   digitalWrite(LED,HIGH); // LED
   
@@ -77,7 +74,6 @@ void setup() {
 
 void loop() {
   
-
   // sensors.requestTemperatures();
  
   lightDigit1(numbers[1]); // temp%10]);
@@ -89,12 +85,12 @@ void loop() {
   
    // temp = sensors.getTempC(insideThermometer);
   
-  currentMillis = millis();
-  
- if(currentMillis - previousMillis > interval) {
-   previousMillis = currentMillis;
-   if (digitalRead(LED) == 1) { digitalWrite(LED,LOW); } else { digitalWrite(LED,HIGH); }
-  }
+//  currentMillis = millis();
+//  
+// if(currentMillis - previousMillis > interval) {
+//   previousMillis = currentMillis;
+//   if (digitalRead(LED) == 1) { digitalWrite(LED,LOW); } else { digitalWrite(LED,HIGH); }
+//  }
 
 void lightDigit1(byte number) {
   digitalWrite(CA1,HIGH);
